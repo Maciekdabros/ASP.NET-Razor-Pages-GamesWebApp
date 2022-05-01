@@ -1,0 +1,194 @@
+﻿@page
+@model GamesWebApp.Pages.Games.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    body {
+        overflow-y: scroll;
+    }
+</style>
+
+<h1>Index</h1>
+
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<form>
+    <p>
+        <select asp-for="GameCategory" asp-items="Model.Categories" onchange="this.form.submit();">
+            <option value="" label="--Wybierz kategorię--"></option>
+        </select>
+        <input type="text" id="txtsearch"  placeholder="Szukaj..."  />
+    </p>
+</form>
+
+<p>
+    <label for="Price">Price Range:</label>
+    <input type="text" id="price" readonly style="border:0;font-weight:bold;" />
+</p>
+<div id="slider-range"></div>
+
+<table class="table" id="tablegame">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Game[0].Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Game[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Game[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Game[0].Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Game[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Game[0].Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Game[0].Platform)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Game[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Game[0].ApplicationUser)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Game)
+        {
+           
+        <tr id="@item.GameID">
+            <td style="text-align: center;">
+                @if (item.Content != null)
+                {
+                    <img class="img-responsive" style="max-width: 10vw; max-height: 10vw; " src="data:image/jpeg;base64,@Convert.ToBase64String(item.Content)" />
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            <td style="max-width: 10vw; overflow-wrap: break-word;">
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Platform.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+            </td>
+            <td>
+                @if ((await AuthorizationService.AuthorizeAsync(
+User, item,
+ContactOperations.Update)).Succeeded)
+                {
+                    <a asp-page="./Edit" asp-route-id="@item.GameID">Edit</a>
+                    <text> | </text>
+                }
+
+                <a asp-page="./Details" asp-route-id="@item.GameID">Details</a>
+
+                @if ((await AuthorizationService.AuthorizeAsync(
+User, item,
+ContactOperations.Delete)).Succeeded)
+                {
+                    <text> | </text>
+                    <a asp-page="./Delete" asp-route-id="@item.GameID">Delete</a>
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+    <script>
+        idsFromName = []; //hide these ids
+        idsFromPrice = [];
+
+        function filter() {
+            $("table tr").each(function (results) {
+                if (idsFromName.some(x => x == $(this)[0].id) || idsFromPrice.some(x => x == $(this)[0].id)) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            })
+        }
+
+        $("#txtsearch").on("keyup", function () {
+            var txtenter = $(this).val();
+            idsFromName = [];
+            $("table tr").each(function (results) {
+                if (results !== 0) {
+                    var thisText = $(this).find("td:nth-child(1)").text();
+                    if (thisText.toLowerCase().indexOf(txtenter.toLowerCase()) < 0) {
+                        idsFromName.push($(this)[0].id);
+                    }
+                }
+            });
+            filter();
+        });
+
+        $(function () {
+            $("#slider-range").slider({
+                range: true,
+                min: 0,
+                max: 500,
+                values: [0, 300],
+                slide: function (event, ui) {
+                    $("#price").val(ui.values[0] + "zł" + " - " + ui.values[1] + "zł");
+                    var min = ui.values[0];
+                    var max = ui.values[1];
+
+                    idsFromPrice = []
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Games/Search?min=' + min + '&max=' + max,
+                        success: function (gamelist) {
+                            $("tbody tr").each(function (results) {
+                                if (!gamelist.some(game => game.toString() == $(this)[0].id)) {
+                                    idsFromPrice.push($(this)[0].id)
+                                }
+                            })
+                            filter();
+                        }
+                    });
+
+                    
+                }
+            });
+        });
+
+
+    </script>
+
+}
