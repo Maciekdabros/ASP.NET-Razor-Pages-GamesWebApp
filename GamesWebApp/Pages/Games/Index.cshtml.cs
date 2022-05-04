@@ -33,12 +33,21 @@ namespace GamesWebApp.Pages.Games
         [BindProperty(SupportsGet = true)]
         public string GameCategory { get; set; }
 
-     
+        [BindProperty]
+        public List<SelectListItem> Users { get; set; }
+
+        [BindProperty]
+        public string MyUser { get; set; }
+
+
+
         //[HttpGet]
         //[Route("/Games/Search/{min}/{max}")]
 
         public async Task OnGetAsync()
         {
+
+
             IQueryable<string> genreQuery = (IQueryable<string>)(from m in Context.Game
                                             orderby m.Category
                                             select m.Category);
@@ -47,9 +56,19 @@ namespace GamesWebApp.Pages.Games
 
             var currentUserId = UserManager.GetUserId(User);
 
+           // var messages = await Context.Messages.ToListAsync();
+            
+
             var games = Context.Game
                  .Include(c => c.Platform)
                  .Include(c => c.ApplicationUser).AsQueryable();
+
+            Users = UserManager.Users.ToList()
+         .Select(a => new SelectListItem { Text = a.UserName, Value = a.UserName })
+         .OrderBy(s => s.Text).ToList();
+
+            //get logged in user name
+            MyUser = User.Identity.Name;
 
             // var users = UserManager.Users.
             // Include(d => d.UserName);

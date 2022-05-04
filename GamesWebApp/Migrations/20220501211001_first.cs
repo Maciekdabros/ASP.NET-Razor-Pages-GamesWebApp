@@ -169,6 +169,27 @@ namespace GamesWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Message",
+                columns: table => new
+                {
+                    MessageID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Message", x => x.MessageID);
+                    table.ForeignKey(
+                        name: "FK_Message_AspNetUsers_UserID",
+                        column: x => x.UserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Game",
                 columns: table => new
                 {
@@ -261,6 +282,11 @@ namespace GamesWebApp.Migrations
                 name: "IX_Game_PlatformID",
                 table: "Game",
                 column: "PlatformID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Message_UserID",
+                table: "Message",
+                column: "UserID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -284,13 +310,16 @@ namespace GamesWebApp.Migrations
                 name: "Game");
 
             migrationBuilder.DropTable(
+                name: "Message");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Platform");
 
             migrationBuilder.DropTable(
-                name: "Platform");
+                name: "AspNetUsers");
         }
     }
 }

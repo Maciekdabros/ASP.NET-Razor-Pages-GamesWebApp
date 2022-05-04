@@ -21,7 +21,7 @@ namespace GamesWebApp.Pages
 
         public void OnGet()
         {
-
+            //Response.Redirect("https://localhost:44374/Games");
         }
     }
 }

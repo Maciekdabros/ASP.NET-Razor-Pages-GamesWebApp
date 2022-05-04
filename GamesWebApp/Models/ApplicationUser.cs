@@ -10,6 +10,13 @@ namespace GamesWebApp.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        /*
+        public ApplicationUser()
+        {
+            Messages = new HashSet<Message>();
+        }
+        */
+
         [Required]
         public string Firstname { get; set; }
 
@@ -17,5 +24,7 @@ namespace GamesWebApp.Models
         public string Lastname { get; set; }
 
         public List<Game> Games { get; set; }
+
+        public List<Message> Messages { get; set; }
     }
 }

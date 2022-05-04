@@ -19,6 +19,18 @@ namespace GamesWebApp.Data
 
         public DbSet<Platform> Platform { get; set; }
 
+        
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<Message>()
+                .HasOne<ApplicationUser>(a => a.ApplicationUser)
+                .WithMany(d => d.Messages)
+                .HasForeignKey(d => d.UserID);
+        }
+        
+
+        public DbSet<Message> Message { get; set; }
 
 
     }

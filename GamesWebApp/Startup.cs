@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using GamesWebApp.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Http;
+using GamesWebApp.Hubs;
+using GamesWebApp.Models;
 
 namespace GamesWebApp
 {
@@ -56,6 +58,8 @@ namespace GamesWebApp
             services.AddSingleton<IAuthorizationHandler,
                                   AdministratorsAuthorizationHandler>();
 
+            services.AddSignalR();
+
 
             /*
             services.Configure<RequestLocalizationOptions>(options =>
@@ -87,14 +91,22 @@ namespace GamesWebApp
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
 
-           // app.UseRequestLocalization();
+            app.UseAuthentication();
+            
+            app.UseAuthorization();
+            
+
+            // app.UseRequestLocalization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
     }

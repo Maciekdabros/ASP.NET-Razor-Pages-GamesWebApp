@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamesWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220429195239_first")]
+    [Migration("20220501211001_first")]
     partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,6 +73,30 @@ namespace GamesWebApp.Migrations
                     b.HasIndex("PlatformID");
 
                     b.ToTable("Game");
+                });
+
+            modelBuilder.Entity("GamesWebApp.Models.Message", b =>
+                {
+                    b.Property<int>("MessageID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("MessageID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Message");
                 });
 
             modelBuilder.Entity("GamesWebApp.Models.Platform", b =>
@@ -334,6 +358,15 @@ namespace GamesWebApp.Migrations
                     b.Navigation("Platform");
                 });
 
+            modelBuilder.Entity("GamesWebApp.Models.Message", b =>
+                {
+                    b.HasOne("GamesWebApp.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Messages")
+                        .HasForeignKey("UserID");
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -393,6 +426,8 @@ namespace GamesWebApp.Migrations
             modelBuilder.Entity("GamesWebApp.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Games");
+
+                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }
