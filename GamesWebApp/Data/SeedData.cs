@@ -37,7 +37,7 @@ namespace GamesWebApp.Data
             var user = await userManager.FindByNameAsync(UserName);
             if (user == null)
             {
-                user = new IdentityUser
+                user = new ApplicationUser
                 {
                     UserName = UserName,
                     EmailConfirmed = true

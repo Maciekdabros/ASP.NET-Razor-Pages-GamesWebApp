@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamesWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220501211001_first")]
-    partial class first
+    [Migration("20220510192223_second")]
+    partial class second
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,9 +27,6 @@ namespace GamesWebApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -66,8 +63,6 @@ namespace GamesWebApp.Migrations
 
                     b.HasKey("GameID");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("OwnerID");
 
                     b.HasIndex("PlatformID");
@@ -82,6 +77,9 @@ namespace GamesWebApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -90,11 +88,11 @@ namespace GamesWebApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MessageID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Message");
                 });
@@ -339,12 +337,8 @@ namespace GamesWebApp.Migrations
 
             modelBuilder.Entity("GamesWebApp.Models.Game", b =>
                 {
-                    b.HasOne("GamesWebApp.Models.ApplicationUser", null)
+                    b.HasOne("GamesWebApp.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Games")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "ApplicationUser")
-                        .WithMany()
                         .HasForeignKey("OwnerID");
 
                     b.HasOne("GamesWebApp.Models.Platform", "Platform")
@@ -362,7 +356,7 @@ namespace GamesWebApp.Migrations
                 {
                     b.HasOne("GamesWebApp.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Messages")
-                        .HasForeignKey("UserID");
+                        .HasForeignKey("ApplicationUserId");
 
                     b.Navigation("ApplicationUser");
                 });

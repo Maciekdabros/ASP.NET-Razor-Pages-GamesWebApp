@@ -56,7 +56,7 @@ namespace GamesWebApp.Models
         public string OwnerID { get; set; }
 
         [ForeignKey("OwnerID")]
-        public IdentityUser ApplicationUser { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
        // public IFormFile FormFile { get; set; }
 

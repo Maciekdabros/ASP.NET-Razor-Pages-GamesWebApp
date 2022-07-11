@@ -42,7 +42,7 @@ namespace GamesWebApp
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
-            
+
 
             services.AddAuthorization(options =>
             {

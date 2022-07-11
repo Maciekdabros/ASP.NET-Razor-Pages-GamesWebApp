@@ -4,14 +4,16 @@ using GamesWebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GamesWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220510191701_first")]
+    partial class first
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,6 +27,9 @@ namespace GamesWebApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -61,33 +66,13 @@ namespace GamesWebApp.Migrations
 
                     b.HasKey("GameID");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("OwnerID");
 
                     b.HasIndex("PlatformID");
 
                     b.ToTable("Game");
-                });
-
-            modelBuilder.Entity("GamesWebApp.Models.Like", b =>
-                {
-                    b.Property<int>("LikeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("GiverId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("TakerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LikeID");
-
-                    b.HasIndex("GiverId");
-
-                    b.HasIndex("TakerId");
-
-                    b.ToTable("Like");
                 });
 
             modelBuilder.Entity("GamesWebApp.Models.Message", b =>
@@ -354,8 +339,12 @@ namespace GamesWebApp.Migrations
 
             modelBuilder.Entity("GamesWebApp.Models.Game", b =>
                 {
-                    b.HasOne("GamesWebApp.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("GamesWebApp.Models.ApplicationUser", null)
                         .WithMany("Games")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "ApplicationUser")
+                        .WithMany()
                         .HasForeignKey("OwnerID");
 
                     b.HasOne("GamesWebApp.Models.Platform", "Platform")
@@ -367,21 +356,6 @@ namespace GamesWebApp.Migrations
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Platform");
-                });
-
-            modelBuilder.Entity("GamesWebApp.Models.Like", b =>
-                {
-                    b.HasOne("GamesWebApp.Models.ApplicationUser", "Giver")
-                        .WithMany("LikesGiven")
-                        .HasForeignKey("GiverId");
-
-                    b.HasOne("GamesWebApp.Models.ApplicationUser", "Taker")
-                        .WithMany("LikesTaken")
-                        .HasForeignKey("TakerId");
-
-                    b.Navigation("Giver");
-
-                    b.Navigation("Taker");
                 });
 
             modelBuilder.Entity("GamesWebApp.Models.Message", b =>
@@ -452,10 +426,6 @@ namespace GamesWebApp.Migrations
             modelBuilder.Entity("GamesWebApp.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Games");
-
-                    b.Navigation("LikesGiven");
-
-                    b.Navigation("LikesTaken");
 
                     b.Navigation("Messages");
                 });

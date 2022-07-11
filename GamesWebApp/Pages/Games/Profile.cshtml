@@ -1,0 +1,81 @@
+﻿@page
+@model GamesWebApp.Pages.Games.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+
+<h1>@Html.DisplayFor(modelItem => modelItem.ApplicationUser.UserName)'s Profile</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Firstname
+        </dt>
+        <dd class="col-sm-10">
+            @Model.ApplicationUser.Firstname
+        </dd>
+        <dt class="col-sm-2">
+            Lastname
+        </dt>
+        <dd class="col-sm-10">
+            @Model.ApplicationUser.Lastname
+        </dd>
+        <dt class="col-sm-2">
+            Email
+        </dt>
+        <dd class="col-sm-10">
+            @Model.ApplicationUser.Email
+        </dd>
+        <dt class="col-sm-2">
+            Games
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var item in Model.ApplicationUser.Games)
+            {
+
+                @Html.DisplayFor(modelItem => item.Name)
+
+                <label> </label>
+
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Likes
+        </dt>
+        <dd class="col-sm-10" id="LikeCount">
+            @Html.DisplayFor(modelItem => Model.LikeCount)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <button type="button" id="likebutton" class="like-button" title="Click to like this profile!" style=" margin: 0;">
+        <i class="fa fa-thumbs-up"></i> Like
+    </button> |
+    <a asp-page="./Index">Back to List</a>
+
+</div>
+
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+<link rel="stylesheet" href="styles.css">
+
+<script>
+    $("#likebutton").on("click", function () {
+
+        $.ajax({
+            type: 'GET',
+            url: '/Games/Like',
+            data: { 'id':'@Model.ApplicationUser.Id'},
+            success: function (result) {
+                $("#LikeCount").text(result);
+            }
+        });
+    });
+</script>
+

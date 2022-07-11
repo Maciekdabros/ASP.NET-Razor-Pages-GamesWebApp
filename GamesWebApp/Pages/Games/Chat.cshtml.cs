@@ -34,7 +34,6 @@ namespace GamesWebApp.Pages.Games
 
             await Context.SaveChangesAsync();
             return Page();
-
             }
      
     }

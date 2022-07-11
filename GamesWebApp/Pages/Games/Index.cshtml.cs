@@ -39,14 +39,8 @@ namespace GamesWebApp.Pages.Games
         [BindProperty]
         public string MyUser { get; set; }
 
-
-
-        //[HttpGet]
-        //[Route("/Games/Search/{min}/{max}")]
-
         public async Task OnGetAsync()
-        {
-
+        {          
 
             IQueryable<string> genreQuery = (IQueryable<string>)(from m in Context.Game
                                             orderby m.Category
@@ -55,9 +49,6 @@ namespace GamesWebApp.Pages.Games
             var isAuthorized = User.IsInRole(Constants.AdministratorsRole);
 
             var currentUserId = UserManager.GetUserId(User);
-
-           // var messages = await Context.Messages.ToListAsync();
-            
 
             var games = Context.Game
                  .Include(c => c.Platform)

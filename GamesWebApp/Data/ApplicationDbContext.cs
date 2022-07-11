@@ -19,18 +19,18 @@ namespace GamesWebApp.Data
 
         public DbSet<Platform> Platform { get; set; }
 
-        
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-            builder.Entity<Message>()
-                .HasOne<ApplicationUser>(a => a.ApplicationUser)
-                .WithMany(d => d.Messages)
-                .HasForeignKey(d => d.UserID);
-        }
-        
+        public DbSet<Like> Like { get; set; }
 
         public DbSet<Message> Message { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+
+            base.OnModelCreating(builder);
+            builder.Entity<Like>().HasOne(x => x.Giver).WithMany(x => x.LikesGiven);
+            builder.Entity<Like>().HasOne(x => x.Taker).WithMany(x => x.LikesTaken);
+
+        }
 
 
     }

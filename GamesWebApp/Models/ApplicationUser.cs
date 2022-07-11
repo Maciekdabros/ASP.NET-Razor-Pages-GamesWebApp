@@ -26,5 +26,10 @@ namespace GamesWebApp.Models
         public List<Game> Games { get; set; }
 
         public List<Message> Messages { get; set; }
+
+        public virtual ICollection<Like> LikesGiven { get; set; }
+
+        public virtual ICollection<Like> LikesTaken { get; set; }
+
     }
 }

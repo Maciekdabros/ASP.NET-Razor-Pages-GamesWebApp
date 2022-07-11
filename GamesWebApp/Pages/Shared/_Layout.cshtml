@@ -7,52 +7,169 @@
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index" style="padding-top: 9px;">Game Trader</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index" style="padding-top: 9px;"><img src="~/lib/images/logo3.png" alt="logo" style="margin-top: -20px; margin-left: -10px;" /></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Games/Index">Games</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Games/Index">Lista ogłoszeń</a>
-                        </li>
-
-
                     </ul>
-                        <partial name="_LoginPartial" />
-                    </div>
+                    <partial name="_LoginPartial" />
                 </div>
-            </nav>
-        </header>
-        <div class="container">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
-        </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
 
-        <footer class="border-top footer text-muted">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+
+
+    <div class="footer-dark" style="position: absolute; bottom: 0; width: 100%; height: auto;">
+        <footer style=" margin-top: -20px;">
             <div class="container">
-                &copy; 2022 - GamesWebApp - <a asp-area="" asp-page="/Privacy">Privacy</a>
+                <div class="row">
+                    <div class="col-sm-6 col-md-3 item" style="margin-top: 38px;">
+                        <h3>Explore</h3>
+                        <ul>
+                            <li><a asp-area="" asp-page="/Index" style="color: #f0f9ff;">Home</a></li>
+                            <li><a asp-area="" asp-page="/Games/Index"style="color: #f0f9ff;">Games</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-md-3 item"style="margin-top: 38px;">
+                        <h3>Legal</h3>
+                        <ul>
+                            <li><a asp-area="" asp-page="/Privacy" style="color: #f0f9ff;">Privacy</a></li>
+                            <li><a href="#">Terms</a></li>
+                            <li><a href="#">Help</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="col-md-6 item text"style="margin-top: 38px;">
+                        <h3>GameTrader</h3>
+                        <p>Service that allows the exchange of boxed games for consoles and desktop computers by posting an offer.</p>
+                    </div>
+                    <div class="col item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-reddit"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a></div>
+                </div>
+                <p class="copyright">GameTrader © 2022</p>
             </div>
         </footer>
+    </div>
 
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+    <style>
+        .footer-dark {
+            color: #f0f9ff;
+            background-color: #282d32;
+        }
 
-        @await RenderSectionAsync("Scripts", required: false)
-    </body>
+            .footer-dark h3 {
+                margin-top: 0;
+                margin-bottom: 12px;
+                font-weight: bold;
+                font-size: 16px;
+            }
+
+            .footer-dark ul {
+                padding: 0;
+                list-style: none;
+                line-height: 1.6;
+                font-size: 14px;
+                margin-bottom: 0;
+            }
+
+                .footer-dark ul a {
+                    color: inherit;
+                    text-decoration: none;
+                    opacity: 0.6;
+                }
+
+                    .footer-dark ul a:hover {
+                        opacity: 0.8;
+                    }
+
+        @@media (max-width:767px) {
+            .footer-dark .item:not(.social) {
+                text-align: center;
+                padding-bottom: 20px;
+            }
+        }
+
+        .footer-dark .item.text {
+            margin-bottom: 36px;
+        }
+
+        @@media (max-width:767px) {
+            .footer-dark .item.text {
+                margin-bottom: 0;
+            }
+        }
+
+        .footer-dark .item.text p {
+            opacity: 0.6;
+            margin-bottom: 0;
+        }
+
+        .footer-dark .item.social {
+            text-align: center;
+        }
+
+        @@media (max-width:991px) {
+            .footer-dark .item.social {
+                text-align: center;
+                margin-top: 20px;
+            }
+        }
+
+        .footer-dark .item.social > a {
+            font-size: 20px;
+            width: 36px;
+            height: 36px;
+            line-height: 36px;
+            display: inline-block;
+            text-align: center;
+            border-radius: 50%;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.4);
+            margin: 0 8px;
+            color: #fff;
+            opacity: 0.75;
+        }
+
+            .footer-dark .item.social > a:hover {
+                opacity: 0.9;
+            }
+
+        .footer-dark .copyright {
+            text-align: center;
+            padding-top: 24px;
+            opacity: 0.3;
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+    </style>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
     </html>
