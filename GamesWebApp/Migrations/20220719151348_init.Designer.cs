@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamesWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220510192223_second")]
-    partial class second
+    [Migration("20220719151348_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -70,15 +70,34 @@ namespace GamesWebApp.Migrations
                     b.ToTable("Game");
                 });
 
+            modelBuilder.Entity("GamesWebApp.Models.Like", b =>
+                {
+                    b.Property<int>("LikeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("GiverId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TakerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LikeID");
+
+                    b.HasIndex("GiverId");
+
+                    b.HasIndex("TakerId");
+
+                    b.ToTable("Like");
+                });
+
             modelBuilder.Entity("GamesWebApp.Models.Message", b =>
                 {
                     b.Property<int>("MessageID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -88,11 +107,11 @@ namespace GamesWebApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MessageID");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("UserID");
 
                     b.ToTable("Message");
                 });
@@ -352,11 +371,26 @@ namespace GamesWebApp.Migrations
                     b.Navigation("Platform");
                 });
 
+            modelBuilder.Entity("GamesWebApp.Models.Like", b =>
+                {
+                    b.HasOne("GamesWebApp.Models.ApplicationUser", "Giver")
+                        .WithMany("LikesGiven")
+                        .HasForeignKey("GiverId");
+
+                    b.HasOne("GamesWebApp.Models.ApplicationUser", "Taker")
+                        .WithMany("LikesTaken")
+                        .HasForeignKey("TakerId");
+
+                    b.Navigation("Giver");
+
+                    b.Navigation("Taker");
+                });
+
             modelBuilder.Entity("GamesWebApp.Models.Message", b =>
                 {
                     b.HasOne("GamesWebApp.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Messages")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("UserID");
 
                     b.Navigation("ApplicationUser");
                 });
@@ -420,6 +454,10 @@ namespace GamesWebApp.Migrations
             modelBuilder.Entity("GamesWebApp.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Games");
+
+                    b.Navigation("LikesGiven");
+
+                    b.Navigation("LikesTaken");
 
                     b.Navigation("Messages");
                 });

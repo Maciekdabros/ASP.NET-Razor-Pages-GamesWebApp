@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GamesWebApp.Migrations
 {
-    public partial class first : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -169,6 +169,32 @@ namespace GamesWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Like",
+                columns: table => new
+                {
+                    LikeID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GiverId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TakerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Like", x => x.LikeID);
+                    table.ForeignKey(
+                        name: "FK_Like_AspNetUsers_GiverId",
+                        column: x => x.GiverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Like_AspNetUsers_TakerId",
+                        column: x => x.TakerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Message",
                 columns: table => new
                 {
@@ -203,18 +229,11 @@ namespace GamesWebApp.Migrations
                     Status = table.Column<int>(type: "int", nullable: false),
                     PlatformID = table.Column<int>(type: "int", nullable: false),
                     OwnerID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Content = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Content = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Game", x => x.GameID);
-                    table.ForeignKey(
-                        name: "FK_Game_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Game_AspNetUsers_OwnerID",
                         column: x => x.OwnerID,
@@ -269,11 +288,6 @@ namespace GamesWebApp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Game_ApplicationUserId",
-                table: "Game",
-                column: "ApplicationUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Game_OwnerID",
                 table: "Game",
                 column: "OwnerID");
@@ -282,6 +296,16 @@ namespace GamesWebApp.Migrations
                 name: "IX_Game_PlatformID",
                 table: "Game",
                 column: "PlatformID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Like_GiverId",
+                table: "Like",
+                column: "GiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Like_TakerId",
+                table: "Like",
+                column: "TakerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Message_UserID",
@@ -308,6 +332,9 @@ namespace GamesWebApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Game");
+
+            migrationBuilder.DropTable(
+                name: "Like");
 
             migrationBuilder.DropTable(
                 name: "Message");
